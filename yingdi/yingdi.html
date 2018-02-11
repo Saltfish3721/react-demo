@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+
+<div class="container" id="container">
+
+
+</div>
+</body>
+<script type="text/babel">
+
+    //可以直接使用外部数据，可以通过props传入数据，然后就是一个完整独立的标签（组件）了
+class Hi extends React.Component {
+    constructor(props) {
+        super(props);
+        this.isGoodWord = true
+        this.state = {
+            isOk:true,
+            isGG:true
+        }
+    }
+
+    sayHi(){
+        //数据的改编不能作用于视图
+        //必须之前有绑定数据
+        this.isGoodWord = !this.isGoodWord
+        console.log(this)
+    }
+
+      //这种写法让我误以为setState是在修改所有状态呢
+    sayOk(){
+        this.setState({
+            isOk: !this.state.isOk
+        })
+        console.log(this.state)
+    }
+
+    sayGG(){
+
+        this.setState({
+            isGG:!this.state.isGG
+        })
+        console.log(this.state)
+    }
+
+    render() {
+        /*可以读取外部的变量，在ReactDOM.render之前定义就行了
+        var hi = "hi";*/
+        return (
+                <div >
+                    <h1 onClick={this.sayHi.bind(this)}>
+                        React 小书
+                        {this.isGoodWord
+                            ? <strong> is good{hi}</strong>
+                            : <span> is not good</span>
+                        }
+                        <p>{this.props.data}</p>
+                        <Hello></Hello>
+                    </h1>
+                    <p onClick={this.sayOk.bind(this)}>
+                        React da书
+                        {this.state.isOk
+                            ? <strong> is good{hi}</strong>
+                            : <span> is not good</span>
+                        }
+                    </p>
+                    <p onClick={this.sayGG.bind(this)}>
+                        React da书
+                        {this.state.isGG
+                            ? <strong> is good{hi}</strong>
+                            : <span> is not good</span>
+                        }
+                    </p>
+                </div>
+        );
+    }
+}
+
+    //写在上下都行，可能有变量提升
+    class Hello extends React.Component {
+        constructor(props) {
+            super(props);
+        }
+
+        render() {
+            return (
+                    <p>hello</p>
+
+            );
+        }
+    }
+
+    var hi = "hihihihi"
+/*function sayHi() {
+    console.log("hihihiiihi")
+}*/
+
+var element = <Hi data={"hihihih"}></Hi>
+ReactDOM.render(
+    element,
+    document.getElementById('container')
+)
+
+
+
+
+
+
+</script>
+</html>
