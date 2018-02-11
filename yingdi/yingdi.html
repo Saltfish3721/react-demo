@@ -14,105 +14,86 @@
 
 
 </div>
-</body>
+
+
 <script type="text/babel">
 
-    //可以直接使用外部数据，可以通过props传入数据，然后就是一个完整独立的标签（组件）了
-class Hi extends React.Component {
-    constructor(props) {
-        super(props);
-        this.isGoodWord = true
-        this.state = {
-            isOk:true,
-            isGG:true
-        }
-    }
+function Panel(props){
+    return (
+            <div className="panel panel-default">
+                <div className="panel-body">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <a href="asd.html"><h3 >{props["data"]["title"]}</h3></a>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-4 ">
+                            <img src={props["data"]["icon"]} className="img-responsive">
+                            </img>
+                        </div>
+                        <div className="col-md-8">
+                            <div className="row">
+                                <p>{props["data"]["description"]}</p>
+                            </div>
+                        </div>
+                    </div>
 
-    sayHi(){
-        //数据的改编不能作用于视图
-        //必须之前有绑定数据
-        this.isGoodWord = !this.isGoodWord
-        console.log(this)
-    }
-
-      //这种写法让我误以为setState是在修改所有状态呢
-    sayOk(){
-        this.setState({
-            isOk: !this.state.isOk
-        })
-        console.log(this.state)
-    }
-
-    sayGG(){
-
-        this.setState({
-            isGG:!this.state.isGG
-        })
-        console.log(this.state)
-    }
-
-    render() {
-        /*可以读取外部的变量，在ReactDOM.render之前定义就行了
-        var hi = "hi";*/
-        return (
-                <div >
-                    <h1 onClick={this.sayHi.bind(this)}>
-                        React 小书
-                        {this.isGoodWord
-                            ? <strong> is good{hi}</strong>
-                            : <span> is not good</span>
-                        }
-                        <p>{this.props.data}</p>
-                        <Hello></Hello>
-                    </h1>
-                    <p onClick={this.sayOk.bind(this)}>
-                        React da书
-                        {this.state.isOk
-                            ? <strong> is good{hi}</strong>
-                            : <span> is not good</span>
-                        }
-                    </p>
-                    <p onClick={this.sayGG.bind(this)}>
-                        React da书
-                        {this.state.isGG
-                            ? <strong> is good{hi}</strong>
-                            : <span> is not good</span>
-                        }
-                    </p>
+                    <div className="fixed-bottom">
+                        <div className="col-md-2 col-md-offset-8">
+                            <p><span className="glyphicon glyphicon-user" aria-hidden="true"></span>{props["data"]["author"]}</p>
+                        </div>
+                        <div className="col-md-2">
+                            time
+                        </div>
+                    </div>
                 </div>
-        );
-    }
+            </div>
+    )
 }
 
-    //写在上下都行，可能有变量提升
-    class Hello extends React.Component {
-        constructor(props) {
-            super(props);
-        }
 
-        render() {
-            return (
-                    <p>hello</p>
+var ydRequest = new XMLHttpRequest();
+ydRequest.open("GET","http://www.iyingdi.cn/feed/list/seed?&web=1&seed=2&system=web");
+ydRequest.send();
+ydRequest.onload = function(){
 
-            );
-        }
+    var ydData = JSON.parse(ydRequest.responseText);
+    var panels=[]
+    for(let i=0;i<ydData["feeds"].length;i++){
+        var panel = <Panel data={ydData["feeds"][i]["feed"]} key={i.toString()}/>
+        panels.push(panel)
     }
+    ReactDOM.render(
+        panels,
+        document.getElementById('container')
+    );
+};
 
-    var hi = "hihihihi"
-/*function sayHi() {
-    console.log("hihihiiihi")
+/*function Welcome(props) {
+    const comments = [];
+    for (let comment of props.comments.comments) {
+        comments.push( // 循环每个用户，构建 JSX，push 到数组中
+            <p key={comment}>{comment}</p>
+        )
+    }
+    return (
+        <div>
+            {comments}
+        </div>
+    )
+}
+
+var comments={
+    comments:[
+        "aaaaaaaa",
+        "bbbbbbbb",
+        "cccccccc",
+        "dddddddd",
+        "sdsdsds"
+    ]
 }*/
-
-var element = <Hi data={"hihihih"}></Hi>
-ReactDOM.render(
-    element,
-    document.getElementById('container')
-)
-
-
-
-
-
-
 </script>
+
+</body>
 </html>
