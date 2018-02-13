@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import axios from 'axios';
-
 import Panel from './Panel'
 
  
-
-class Panellist extends React.Component {
+export default class Panellist extends React.Component {
     constructor(props) {
         super(props);
+        console.log("Panellist")
+        console.log(props)
         this.state = {
             feeds: [],
         };
@@ -20,39 +19,31 @@ class Panellist extends React.Component {
                 mtg:3
             }
         var seed = s[this.props.seedname]
-        var url = `http://www.iyingdi.cn/feed/list/seed?&web=1&seed=2&system=web`
+        var url = `http://www.iyingdi.cn/feed/list/seed?&web=1&seed=${seed}&system=web`
+        console.log(url)
         axios.get(url)
             .then(res => {
-                
                 var feeds = res.data.feeds
-           
                 this.setState({
                     feeds:feeds
                 })
-
             });
     }
-
-    getPanellist(){
+    
+    render() {
         var panellist = []
         for(let i=0;i<this.state["feeds"].length;i++){
             var panel = <Panel data={this.state["feeds"][i]["feed"]} key={i.toString()}/>
             panellist.push(panel)
         }
         console.log(panellist)
-        return panellist
-    }
-    render() {
         return (
                 <div>
-                    {this.getPanellist()}
+                    {panellist}
                 </div>
         );
     }
+
+
 }
 
-export default React.createClass({
-  render() {
-    return <Panellist/>
-  }
-})
